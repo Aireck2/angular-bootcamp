@@ -2,10 +2,19 @@
   <h1>
     <img src="./apple.svg" alt="Mercado Libre logo" />
   </h1>
-  <nav></nav>
+  <mat-tab-group
+    [selectedIndex]="selectedTab"
+    (selectedTabChange)="navigateToTab($event)"
+  >
+    <mat-tab label="Home"> </mat-tab>
+    <mat-tab label="About"> </mat-tab>
+    <mat-tab label="Productos"> </mat-tab>
+  </mat-tab-group>
 </header>
 <div class="bar-message">
   <p>{{ "Ultima oportunidad de aprovechar las ofertas" | alertEmojis }}</p>
 </div>
 
-<app-products></app-products>
+<router-outlet></router-outlet>
+
+<!-- <app-products [action]="handleCart"></app-products> -->

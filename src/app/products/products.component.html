@@ -1,3 +1,30 @@
+<button mat-flat-button (click)="openDialog()">Nuevo</button>
+<div>Total products: {{ productsApi.length }}</div>
+<div class="mw-1200 mt-20">
+  <ul class="list-container">
+    <li *ngFor="let product of productsApi">
+      <article>
+        <div>
+          <img
+            [src]="product.image"
+            [alt]="product.title"
+            width="200"
+            height="200"
+          />
+        </div>
+        <h2>{{ product.title }}</h2>
+        <p>{{ product.description | ellipsis }}</p>
+        <p style="font-size: 25px">{{ product.price | currency : "USD" }}</p>
+        <!-- <div class="tag" *ngIf="product.hasDiscount">En Oferta</div> -->
+        <a mat-flat-button [routerLink]="['/products', product.id]">Ver</a>
+
+        <button mat-stroked-button (click)="handleCart()">
+          Agregar al carrito
+        </button>
+      </article>
+    </li>
+  </ul>
+</div>
 <div class="mw-1200 mt-20">
   <ul class="list-container">
     <li *ngFor="let product of products">
@@ -14,6 +41,11 @@
         <p>{{ product.description | ellipsis }}</p>
         <p style="font-size: 25px">{{ product.price | currency : "USD" }}</p>
         <div class="tag" *ngIf="product.hasDiscount">En Oferta</div>
+        <a mat-flat-button [routerLink]="product.id">Ver</a>
+
+        <button mat-stroked-button (click)="handleCart()">
+          Agregar al carrito
+        </button>
       </article>
     </li>
   </ul>
