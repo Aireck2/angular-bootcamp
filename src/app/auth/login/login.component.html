@@ -1,0 +1,43 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title align="center">
+      <div class="flex align-center gap-10 mb-10">
+        <img src="./apple.svg" alt="Apple logo" />
+        Sign in
+      </div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form (submit)="login()">
+      <mat-form-field class="full-w">
+        <mat-label>Enter your email</mat-label>
+        <input matInput [(ngModel)]="email" name="email" />
+      </mat-form-field>
+      <mat-form-field class="full-w">
+        <mat-label>Enter your password</mat-label>
+        <input
+          [(ngModel)]="password"
+          name="password"
+          matInput
+          [type]="hide() ? 'password' : 'text'"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="clickEvent($event)"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide()"
+        >
+          <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-card-actions align="end">
+        <button type="submit" mat-flat-button>Sign in</button>
+      </mat-card-actions>
+    </form>
+  </mat-card-content>
+  @if(errorMessage){
+  <p class="error">{{ errorMessage }}</p>
+  }
+</mat-card>
