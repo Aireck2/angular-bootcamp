@@ -1,0 +1,12 @@
+<mat-card class="avatar-card">
+  <img
+    *ngIf="imageUrl; else defaultAvatar"
+    [src]="imageUrl"
+    alt="User Avatar"
+    class="avatar-img"
+  />
+  <ng-template #defaultAvatar>
+    <mat-icon class="default-avatar">person</mat-icon>
+  </ng-template>
+  <div class="avatar-name">{{ name }}</div>
+</mat-card>
