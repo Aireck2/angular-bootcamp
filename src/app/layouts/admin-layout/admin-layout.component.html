@@ -1,0 +1,23 @@
+<div class="full-h">
+  <mat-toolbar class="example-header">Header</mat-toolbar>
+
+  <mat-sidenav-container class="admin-container" fullscreen>
+    <mat-sidenav #sidenav mode="side" opened class="example-sidenav">
+      <app-avatar
+        imageUrl="https://i.pravatar.cc/150?u=user"
+        name="Admin User"
+      ></app-avatar
+      >`,
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <button mat-mini-fab (click)="sidenav.toggle()" class="toggle-button">
+        <mat-icon
+          [fontIcon]="sidenav.opened ? 'arrow_left' : 'arrow_right'"
+        ></mat-icon>
+      </button>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+
+  <mat-toolbar class="example-footer">Footer</mat-toolbar>
+</div>

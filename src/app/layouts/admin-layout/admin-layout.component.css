@@ -1,0 +1,20 @@
+.admin-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+.toggle-button {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  z-index: 1000;
+  translate: transform(-50%, -50%);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  padding: 2px;
+}
+
+.full-h {
+  height: 100vh;
+}
