@@ -1,19 +1,82 @@
-<header class="mw-1200">
-  <h1>
-    <img src="./apple.svg" alt="Mercado Libre logo" />
-  </h1>
-  <mat-tab-group
-    [selectedIndex]="selectedTab"
-    (selectedTabChange)="navigateToTab($event)"
-  >
-    <mat-tab label="Home"> </mat-tab>
-    <mat-tab label="Productos"> </mat-tab>
-  </mat-tab-group>
-</header>
-<div class="bar-message">
-  <p>{{ "Ultima oportunidad de aprovechar las ofertas" | alertEmojis }}</p>
-</div>
+<mat-sidenav-container
+  class="sidenav-container"
+  hasBackdrop="true"
+  style="height: 100%"
+>
+  <mat-sidenav-content>
+    <header class="mw-1200 pt-20 pb-20">
+      <div class="flex justify-between align-center">
+        <h1>
+          <img src="./apple.svg" alt="Mercado Libre logo" />
+        </h1>
+        <div>
+          <mat-form-field
+            class="search-field"
+            style="width: 500px"
+            appearance="outline"
+          >
+            <mat-icon matPrefix>search</mat-icon>
+            <input
+              matInput
+              [(ngModel)]="searchQuery"
+              (keyup.enter)="onSearch()"
+              placeholder="Search..."
+              class="search-input"
+            />
 
-<router-outlet></router-outlet>
+            <button
+              mat-icon-button
+              matSuffix
+              *ngIf="searchQuery"
+              (click)="clearSearch()"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+        <div>
+          <!-- Main Content -->
+          <button
+            mat-icon-button
+            matBadge="8"
+            matBadgePosition="before"
+            (click)="drawer.toggle()"
+          >
+            <mat-icon>shopping_cart</mat-icon>
+          </button>
 
-<!-- <app-products [action]="handleCart"></app-products> -->
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>person</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu" xPosition="before">
+            <button mat-menu-item>
+              <span>Iniciar sesión</span>
+            </button>
+            <button mat-menu-item>
+              <span>Registrarse</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+      <div class="menu">
+        <mat-tab-group
+          [selectedIndex]="selectedTab"
+          (selectedTabChange)="navigateToTab($event)"
+        >
+          <mat-tab label="Inicio"></mat-tab>
+          <mat-tab label="Productos"></mat-tab>
+        </mat-tab-group>
+      </div>
+    </header>
+    <div class="bar-message">
+      <p>{{ "Ultima oportunidad de aprovechar las ofertas" | alertEmojis }}</p>
+    </div>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+
+  <!-- Sidebar -->
+  <mat-sidenav #drawer mode="over" fixedInViewport="true">
+    <h3>Carrito</h3>
+    <button mat-button (click)="drawer.toggle()">Close</button>
+  </mat-sidenav>
+</mat-sidenav-container>

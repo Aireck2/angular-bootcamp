@@ -22,14 +22,7 @@ export class EllipsisPipe {
 
 @Component({
   selector: "app-products",
-  imports: [
-    NgFor,
-    NgIf,
-    CurrencyPipe,
-    EllipsisPipe,
-    RouterLink,
-    MatButtonModule,
-  ],
+  imports: [NgFor, CurrencyPipe, EllipsisPipe, RouterLink, MatButtonModule],
   templateUrl: "./products.component.html",
   styleUrls: ["./products.component.css"],
 })

@@ -5,6 +5,7 @@ import { AuthLayoutComponent } from "./layouts/auth-layout/auth-layout.component
 import { MainLayoutComponent } from "./layouts/main-layout/main-layout.component";
 import { isAuthGuard } from "./is-auth.guard";
 import { AdminLayoutComponent } from "./layouts/admin-layout/admin-layout.component";
+import { HomeComponent } from "./home/home.component";
 
 export const routes: Routes = [
   {
@@ -24,11 +25,7 @@ export const routes: Routes = [
     children: [
       { path: "products", component: ProductsComponent },
       { path: "products/:id", component: ProductDetailComponent },
-      {
-        path: "",
-        loadComponent: () =>
-          import("./home/home.component").then((m) => m.HomeComponent),
-      },
+      { path: "", component: HomeComponent },
     ],
   },
   {
