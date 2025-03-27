@@ -1,0 +1,41 @@
+<hlm-dialog>
+  <button id="edit-profile" brnDialogTrigger hlmBtn variant="outline">
+    User
+  </button>
+  <hlm-dialog-content class="max-w-[650px]" *brnDialogContent="let ctx">
+    <hlm-dialog-header>
+      <h3 hlmDialogTitle>Login</h3>
+      <!-- <p hlmDialogDescription>
+        Make changes to your profile here. Click save when you're done.
+      </p> -->
+    </hlm-dialog-header>
+    <form>
+      <hlm-form-field class="pb-4">
+        <label hlmLabel class="sr-only" for="email">Email</label>
+        <input
+          hlmInput
+          class="w-full"
+          placeholder="Email"
+          type="email"
+          id="email"
+          autocomplete="off"
+        />
+      </hlm-form-field>
+      <hlm-form-field class="pb-4">
+        <label hlmLabel class="sr-only" for="password">Password</label>
+        <input
+          hlmInput
+          class="w-full"
+          placeholder="Password"
+          type="password"
+          id="password"
+          autocomplete="off"
+        />
+      </hlm-form-field>
+
+      <hlm-dialog-footer>
+        <button hlmBtn type="submit">Login</button>
+      </hlm-dialog-footer>
+    </form>
+  </hlm-dialog-content>
+</hlm-dialog>

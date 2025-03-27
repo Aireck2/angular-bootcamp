@@ -9,7 +9,7 @@ import {
   HlmCarouselNextComponent,
   HlmCarouselPreviousComponent,
 } from '@spartan-ng/ui-carousel-helm';
-import { LoginDialogComponent } from './login-dialog/login-dialog.component';
+import { LoginDialogComponent } from './components/login-dialog/login-dialog.component';
 
 @Component({
   selector: 'app-home',
