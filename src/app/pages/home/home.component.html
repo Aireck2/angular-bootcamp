@@ -1,1 +1,93 @@
-<p>home works!</p>
+<div class="w-full bg-black h-[80px] p-4">
+  <div class="grid grid-cols-[auto_1fr_auto] h-full place-items-center">
+    <span class="text-2xl font-bold">E-Commerce</span>
+    <div class="flex">
+      @for (item of navItems; track $index) {
+
+      <a hlmBtn variant="link" class="cursor-pointer" href="{{ item.key }}">
+        {{ item.label }}
+      </a>
+      }
+    </div>
+    <div class="flex">
+      <app-login-dialog></app-login-dialog>
+      <button hlmBtn variant="outline">Carrito</button>
+    </div>
+  </div>
+</div>
+<div class="m-auto max-w-[1000px]">
+  <p class="mb-2 mt-2 text-center text-2xl font-bold">En Oferta</p>
+  <div class="flex items-center justify-center w-full p-4">
+    <hlm-carousel class="w-full" [plugins]="plugins">
+      <hlm-carousel-content class="-ml-1">
+        @for (item of items; track item) {
+        <hlm-carousel-item class="pl-1 basis-1/4">
+          <div class="p-1">
+            <section
+              hlmCard
+              class="border-2 border-border rounded-2xl h-full w-full"
+            >
+              <img
+                src="https://randomwordgenerator.com/img/picture-generator/g5e88100863414dbdb30f6ba4c053e7e2d5c4ccb9f781dd52e7392e6c95826b83302b30779a019d15ced6e5cce473483a_640.jpg"
+                alt=""
+              />
+              <!-- class="flex items-center justify-center p-6 aspect-square" -->
+              <div hlmCardContent class="p-2">
+                <p class="text-sm">Categoria</p>
+                <p class="text-2xl font-semibold">product.name</p>
+                <p>
+                  <span class="text-1xl">S/.</span
+                  ><span class="text-3xl">{{ item }}0.00</span>
+                </p>
+                <div class="w-full flex justify-end">
+                  <button hlmBtn class="mt-2">+ Agregar</button>
+                </div>
+              </div>
+            </section>
+          </div>
+        </hlm-carousel-item>
+        }
+      </hlm-carousel-content>
+      <button hlm-carousel-previous></button>
+      <button hlm-carousel-next></button>
+    </hlm-carousel>
+  </div>
+  <div class="w-full bg-gray-500 h-[200px] rounded-2xl"></div>
+  <p class="mb-2 mt-2 text-center text-2xl font-bold">Categoria 1</p>
+  <div class="flex items-center justify-center w-full p-4">
+    <hlm-carousel class="w-full" [plugins]="plugins">
+      <hlm-carousel-content class="-ml-1">
+        @for (item of items; track item) {
+        <hlm-carousel-item class="pl-1 basis-1/4">
+          <div class="p-1">
+            <section
+              hlmCard
+              class="border-2 border-border rounded-2xl h-full w-full"
+            >
+              <img
+                src="https://randomwordgenerator.com/img/picture-generator/57e5d1444250a814f1dc8460962e33791c3ad6e04e5074417c2f7dd4914ac7_640.jpg"
+                alt=""
+              />
+              <div hlmCardContent class="p-2">
+                <p class="text-sm">Categoria</p>
+                <p class="text-2xl font-semibold">product.name</p>
+                <p>
+                  <span class="text-1xl">S/.</span
+                  ><span class="text-3xl">{{ item }}0.00</span>
+                </p>
+                <div class="w-full flex justify-end">
+                  <button hlmBtn class="mt-2">+ Agregar</button>
+                </div>
+              </div>
+            </section>
+          </div>
+        </hlm-carousel-item>
+        }
+      </hlm-carousel-content>
+      <button hlm-carousel-previous></button>
+      <button hlm-carousel-next></button>
+    </hlm-carousel>
+  </div>
+</div>
+
+<div class="w-full bg-black h-[80px] grid place-items-center">Footer/menu</div>
