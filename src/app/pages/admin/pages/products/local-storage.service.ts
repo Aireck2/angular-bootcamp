@@ -1,9 +1,9 @@
 import { isPlatformBrowser } from '@angular/common';
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 
-const EXAMPLES_TASK_SETTINGS_KEY = 'spartan-examples';
+const PRODUCTS_SETTINGS_KEY = 'products-settings';
 
-const DEFAULT_TASK_TABLE_COLUMNS = ['id', 'name', 'status'];
+const DEFAULT_PRODUCTS_TABLE_COLUMNS = ['id', 'name', 'status'];
 
 /**
  * Manages local storage settings for the task table.
@@ -16,28 +16,28 @@ export class LocalStorageService {
   private readonly _isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   private readonly _settings = {
-    taskTable: {
+    productsTable: {
       selectedColumns:
-        this.getSelectedColumnsSettings(EXAMPLES_TASK_SETTINGS_KEY) ??
-        DEFAULT_TASK_TABLE_COLUMNS,
+        this.getSelectedColumnsSettings(PRODUCTS_SETTINGS_KEY) ??
+        DEFAULT_PRODUCTS_TABLE_COLUMNS,
     },
   };
 
   saveTaskTableColumn(value: any): void {
-    this._settings.taskTable.selectedColumns.push(value);
-    this.updateSettings(EXAMPLES_TASK_SETTINGS_KEY, this._settings.taskTable);
+    this._settings.productsTable.selectedColumns.push(value);
+    this.updateSettings(PRODUCTS_SETTINGS_KEY, this._settings.productsTable);
   }
 
   deleteTaskTableColumn(value: any): void {
-    this._settings.taskTable.selectedColumns =
-      this._settings.taskTable.selectedColumns.filter(
+    this._settings.productsTable.selectedColumns =
+      this._settings.productsTable.selectedColumns.filter(
         (column: any) => column !== value
       );
-    this.updateSettings(EXAMPLES_TASK_SETTINGS_KEY, this._settings.taskTable);
+    this.updateSettings(PRODUCTS_SETTINGS_KEY, this._settings.productsTable);
   }
 
   getTaskTableColumns(): string[] {
-    return this._settings.taskTable.selectedColumns;
+    return this._settings.productsTable.selectedColumns;
   }
 
   private updateSettings(key: string, settings: any) {
@@ -48,7 +48,7 @@ export class LocalStorageService {
 
   private getSelectedColumnsSettings(key: string) {
     if (!this._isBrowser) {
-      return DEFAULT_TASK_TABLE_COLUMNS;
+      return DEFAULT_PRODUCTS_TABLE_COLUMNS;
     }
     const settings = localStorage.getItem(key);
     if (!settings) {

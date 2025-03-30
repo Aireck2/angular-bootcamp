@@ -12,7 +12,7 @@
     >
       <brn-column-def name="id" class="w-32">
         <hlm-th truncate *brnHeaderDef>
-          <button hlmBtn size="sm" variant="ghost">Id</button>
+          <button hlmBtn size="sm" variant="ghost">ID</button>
         </hlm-th>
         <hlm-td truncate *brnCellDef="let element">
           {{ element.id }}
@@ -23,11 +23,6 @@
           <button hlmBtn size="sm" variant="ghost">Product</button>
         </hlm-th>
         <hlm-td truncate *brnCellDef="let element" class="font-medium">
-          <div
-            class="text-foreground inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold"
-          >
-            {{ element.type }}
-          </div>
           {{ element.name }}
         </hlm-td>
       </brn-column-def>
@@ -37,49 +32,138 @@
         </hlm-th>
         <hlm-td truncate *brnCellDef="let element">
           <div class="flex items-center">
-            <ng-icon
-              hlm
-              class="text-muted-foreground mr-2"
-              size="sm"
-              [name]="element.status | statusIcon"
-            />
             <span>{{ element.status }}</span>
           </div>
         </hlm-td>
       </brn-column-def>
 
-      <brn-column-def name="actions" class="w-16">
-        <hlm-th *brnHeaderDef></hlm-th>
+      <brn-column-def name="actions" class="w-40">
+        <hlm-th *brnHeaderDef>Actions</hlm-th>
         <hlm-td *brnCellDef="let element">
-          <button
-            hlmBtn
-            variant="ghost"
-            class="h-6 w-6 p-0.5"
-            align="end"
-            [brnMenuTriggerFor]="menu"
-          >
-            <ng-icon hlm size="sm" name="lucideEllipsis" />
-          </button>
-
-          <ng-template #menu>
-            <hlm-menu>
-              <hlm-menu-label>Actions</hlm-menu-label>
-              <hlm-menu-separator />
-              <hlm-menu-group>
-                <button hlmMenuItem>Edit</button>
-              </hlm-menu-group>
-              <hlm-menu-separator />
-
-              <hlm-menu-group>
-                <button hlmMenuItem>
-                  Delete
-                  <span class="ml-auto text-xs tracking-widest opacity-60"
-                    >⌘⌫</span
+          <hlm-dialog>
+            <button
+              size="icon"
+              class="cursor-pointer"
+              [class]="_hlmMenuItemClasses"
+              brnDialogTrigger
+            >
+              <ng-icon name="lucideFilePenLine"></ng-icon>
+            </button>
+            <hlm-dialog-content
+              class="sm:max-w-[425px]"
+              *brnDialogContent="let ctx"
+            >
+              <hlm-dialog-header>
+                <h2 hlmDialogTitle>Edit Product</h2>
+                <p hlmDialogDescription>
+                  Make changes to your product here. Click save when you're
+                  done.
+                </p>
+              </hlm-dialog-header>
+              <form [formGroup]="productForm" (ngSubmit)="createProduct()">
+                <hlm-form-field class="pb-4">
+                  <label hlmLabel class="sr-only" for="email">Name</label>
+                  <input
+                    hlmInput
+                    class="w-full"
+                    placeholder="Name"
+                    type="text"
+                    id="name"
+                    formControlName="name"
+                  />
+                </hlm-form-field>
+                <hlm-form-field class="pb-4">
+                  <label hlmLabel class="sr-only" for="description"
+                    >Description</label
                   >
+                  <textarea
+                    hlmInput
+                    class="w-full"
+                    placeholder="Description"
+                    id="description"
+                    rows="4"
+                    formControlName="description"
+                  ></textarea>
+                </hlm-form-field>
+                <hlm-form-field class="pb-4">
+                  <label hlmLabel class="sr-only" for="price">Price</label>
+                  <input
+                    hlmInput
+                    class="w-full"
+                    placeholder="Price"
+                    type="number"
+                    id="price"
+                    formControlName="price"
+                  />
+                </hlm-form-field>
+                <div class="w-full pb-4 pt-1">
+                  <label
+                    class="flex items-center max-w-fit"
+                    hlmLabel
+                    for="hasDiscount"
+                  >
+                    <hlm-switch
+                      class="mr-2"
+                      id="hasDiscount"
+                      formControlName="hasDiscount"
+                    />
+                    Has Discount?
+                  </label>
+                </div>
+
+                <hlm-form-field
+                  *ngIf="productForm.get('hasDiscount')?.value"
+                  class="pb-4"
+                >
+                  <label hlmLabel class="sr-only" for="percentageDiscount"
+                    >Percentage discount</label
+                  >
+                  <input
+                    hlmInput
+                    formControlName="percentageDiscount"
+                    class="w-full"
+                    placeholder="Percentage discount"
+                    type="number"
+                    id="percentageDiscount"
+                  />
+                </hlm-form-field>
+
+                <hlm-dialog-footer>
+                  <button hlmBtn type="submit">Save changes</button>
+                </hlm-dialog-footer>
+              </form>
+            </hlm-dialog-content>
+          </hlm-dialog>
+          <hlm-alert-dialog>
+            <button
+              size="icon"
+              id="edit-profile"
+              brnAlertDialogTrigger
+              [class]="_hlmMenuItemClasses"
+              class="cursor-pointer"
+            >
+              <ng-icon name="lucideTrash2"></ng-icon>
+            </button>
+            <hlm-alert-dialog-content *brnAlertDialogContent="let ctx">
+              <hlm-alert-dialog-header>
+                <h3 hlmAlertDialogTitle>Are you absolutely sure?</h3>
+                <p hlmAlertDialogDescription>
+                  This action cannot be undone. This will remove this item.
+                </p>
+              </hlm-alert-dialog-header>
+              <hlm-alert-dialog-footer>
+                <button hlmAlertDialogCancel (click)="ctx.close()">
+                  Cancel
                 </button>
-              </hlm-menu-group>
-            </hlm-menu>
-          </ng-template>
+                <button
+                  hlmAlertDialogAction
+                  (click)="deleteProduct(); ctx.close()"
+                >
+                  Delete
+                </button>
+              </hlm-alert-dialog-footer>
+            </hlm-alert-dialog-content>
+          </hlm-alert-dialog>
         </hlm-td>
       </brn-column-def>
       <div

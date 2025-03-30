@@ -7,7 +7,7 @@ import { HlmFormFieldModule } from '@spartan-ng/ui-formfield-helm';
 import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
-import { AuthService } from '../../../../../service/auth.service';
+import { AuthService } from '../../../../../services/auth.service';
 
 @Component({
   selector: 'app-login-form',

@@ -14,7 +14,7 @@ import { HlmButtonModule } from '@spartan-ng/ui-button-helm';
 import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
 import { HlmMenuModule } from '@spartan-ng/ui-menu-helm';
 import { HlmSelectModule } from '@spartan-ng/ui-select-helm';
-import { AuthService } from '../../service/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @Component({

@@ -23,11 +23,29 @@ export class ProductsService {
   private readonly _debouncedFilter = toSignal(
     toObservable(this._rawFilterInput).pipe(debounceTime(300))
   );
+  public readonly columns = [
+    {
+      key: 'id',
+      title: 'ID',
+      width: '32',
+    },
+    {
+      key: 'name',
+      title: 'Products',
+      width: '60',
+    },
+    {
+      key: 'status',
+      title: 'status',
+      width: '32',
+    },
+  ];
   protected readonly _brnColumnManager = useBrnColumnManager({
     id: { visible: false, label: 'Id' },
     name: { visible: false, label: 'Product' },
     status: { visible: false, label: 'Status' },
   });
+
   protected readonly _allDisplayedColumns = computed(() => [
     ...this._brnColumnManager.displayedColumns(),
     'actions',

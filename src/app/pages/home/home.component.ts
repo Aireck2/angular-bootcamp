@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import {
@@ -28,6 +29,12 @@ import { LoginDialogComponent } from './components/login-dialog/login-dialog.com
 })
 export class HomeComponent {
   private _router = inject(Router);
+  private titleService = inject(Title);
+
+  constructor() {
+    this.titleService.setTitle('AngularShop | Home');
+  }
+
   public navItems = [
     {
       label: 'Inicio',
