@@ -1,3 +1,8 @@
+@if(error().show){
+<div class="absolute top-10 right-10 z-50 animate-slide-in">
+  <app-error-alert></app-error-alert>
+</div>
+}
 <div class="mx-auto w-full justify-center space-y-6 sm:w-[350px]">
   <div class="space-y-2 text-center">
     <h1 class="text-2xl font-semibold tracking-tight">Sign in</h1>
@@ -7,7 +12,7 @@
     </p>
   </div>
   <div class="grid gap-6">
-    <form (ngSubmit)="login()">
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
       <hlm-form-field class="pb-4">
         <label hlmLabel class="sr-only" for="email">Email</label>
         <input
@@ -16,7 +21,7 @@
           placeholder="Email"
           type="email"
           id="email"
-          autocomplete="off"
+          formControlName="email"
         />
       </hlm-form-field>
       <hlm-form-field class="pb-4">
@@ -26,8 +31,8 @@
           class="w-full"
           placeholder="Password"
           type="password"
+          formControlName="password"
           id="password"
-          autocomplete="off"
         />
       </hlm-form-field>
       <button hlmBtn [disabled]="isLoading()" class="mt-2 w-full" type="submit">
