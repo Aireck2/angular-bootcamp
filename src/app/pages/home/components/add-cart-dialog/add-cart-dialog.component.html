@@ -1,0 +1,101 @@
+<hlm-dialog>
+  <button
+    hlmBtn
+    id="edit-profile"
+    brnDialogTrigger
+    hlmBtn
+    class="block w-full cursor-pointer"
+  >
+    + Agregar
+  </button>
+  <hlm-dialog-content class="min-w-[450px]" *brnDialogContent="let ctx">
+    <hlm-dialog-header>
+      <h3 hlmDialogTitle>Finish your order</h3>
+      <p hlmDialogDescription>Fill out your details to finish your order.</p>
+    </hlm-dialog-header>
+    <form [formGroup]="cartForm" (ngSubmit)="finishOrder(ctx)">
+      @if(!showUser()){
+      <h3 [class]="hlmH4">Register</h3>
+      <hlm-form-field class="pb-4">
+        <hlm-form-field class="pb-4">
+          <label hlmLabel class="sr-only" for="name">Name</label>
+          <input
+            hlmInput
+            class="w-full"
+            placeholder="Name"
+            type="Name"
+            id="name"
+            formControlName="name"
+          />
+        </hlm-form-field>
+        <label hlmLabel class="sr-only" for="email">Email</label>
+        <input
+          hlmInput
+          class="w-full"
+          placeholder="Email"
+          type="email"
+          id="email"
+          formControlName="email"
+        />
+      </hlm-form-field>
+      <hlm-form-field class="pb-4">
+        <label hlmLabel class="sr-only" for="password">Password</label>
+        <input
+          hlmInput
+          class="w-full"
+          placeholder="Password"
+          type="password"
+          id="password"
+          formControlName="password"
+        />
+      </hlm-form-field>
+      } @else{
+      <p class="font-semibold">Hi, {{ user()?.name }}</p>
+      <p class="my-4">{{ user()?.email }}</p>
+      }
+
+      <h3 [class]="hlmH4">Product</h3>
+      <section
+        hlmCard
+        class="relative flex border-2 border-border rounded-2xl w-full mb-5"
+      >
+        <img
+          width="120"
+          class="w-[120px] max-h-[150px] object-cover"
+          src="{{ product().images[0] }}"
+          alt="{{ product().name }}"
+        />
+        @if(product().hasDiscount) {
+        <div
+          class="absolute top-2 right-2 flex justify-center bg-red-700 px-4 py-2 rounded-lg"
+        >
+          <span>
+            {{ product().percentageDiscount * 0.01 | percent }}
+          </span>
+        </div>
+        }
+        <div hlmCardContent class="p-2 h-full">
+          <p class="text-xs">Categoria {{ product().id }}</p>
+          <p class="text-lg font-semibold">{{ product().name }}</p>
+
+          <p>
+            <span class="text line-through text-zinc-500">S/.</span
+            ><span class="text line-through text-zinc-500">{{
+              product().price
+            }}</span>
+          </p>
+          <p class="text-red-500">
+            <span class="text-lg">S/.</span
+            ><span class="text-xl">{{ product().priceWithDiscount }}</span>
+          </p>
+        </div>
+      </section>
+
+      <hlm-dialog-footer>
+        <button hlmBtn type="submit" class="cursor-pointer">
+          Finish order
+        </button>
+      </hlm-dialog-footer>
+    </form>
+  </hlm-dialog-content>
+</hlm-dialog>
