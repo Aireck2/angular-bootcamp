@@ -1,15 +1,13 @@
 <hlm-dialog>
   <button id="edit-profile" brnDialogTrigger hlmBtn variant="outline">
-    User
+    <ng-icon hlm size="sm" name="lucideUser"></ng-icon>
   </button>
-  <hlm-dialog-content class="max-w-[650px]" *brnDialogContent="let ctx">
+  <hlm-dialog-content class="min-w-[450px]" *brnDialogContent="let ctx">
     <hlm-dialog-header>
       <h3 hlmDialogTitle>Login</h3>
-      <!-- <p hlmDialogDescription>
-        Make changes to your profile here. Click save when you're done.
-      </p> -->
+      <p hlmDialogDescription></p>
     </hlm-dialog-header>
-    <form>
+    <form [formGroup]="loginForm" (ngSubmit)="login(ctx)">
       <hlm-form-field class="pb-4">
         <label hlmLabel class="sr-only" for="email">Email</label>
         <input
@@ -18,7 +16,7 @@
           placeholder="Email"
           type="email"
           id="email"
-          autocomplete="off"
+          formControlName="email"
         />
       </hlm-form-field>
       <hlm-form-field class="pb-4">
@@ -29,7 +27,7 @@
           placeholder="Password"
           type="password"
           id="password"
-          autocomplete="off"
+          formControlName="password"
         />
       </hlm-form-field>
 

@@ -1,6 +1,11 @@
 <div class="w-full bg-black h-[80px] p-4">
   <div class="grid grid-cols-[auto_1fr_auto] h-full place-items-center">
-    <span class="text-2xl font-bold">E-Commerce</span>
+    <div class="flex py-4 items-center">
+      <img src="favicon.ico" alt="logo" class="h-8 w-8" />
+      <h2 class="px-4 text-lg font-semibold tracking-tight">
+        {{ appName }}
+      </h2>
+    </div>
     <div class="flex">
       @for (item of navItems; track $index) {
 
@@ -9,41 +14,72 @@
       </a>
       }
     </div>
-    <div class="flex">
+    <div class="flex gap-4">
+      @if(showUser()){
+      <hlm-avatar [brnMenuTriggerFor]="profile" align="center">
+        <span class="bg-destructive text-white" hlmAvatarFallback>{{
+          user().name ?? "" | abbreviation
+        }}</span>
+      </hlm-avatar>
+      <ng-template #profile>
+        <hlm-menu>
+          <div class="flex flex-col space-y-1" hlmMenuItem>
+            <p class="text-sm font-medium leading-none">
+              {{ user().name }}
+            </p>
+            <p class="text-muted-foreground text-xs leading-none">
+              {{ user().email }}
+            </p>
+          </div>
+
+          <hlm-menu-separator />
+
+          <hlm-menu-group>
+            <hlm-menu-group>
+              <button hlmMenuItem disabled>
+                <ng-icon hlm name="lucideUser" hlmMenuIcon />
+                <span>Profile</span>
+                <hlm-menu-shortcut>⇧⌘P</hlm-menu-shortcut>
+              </button>
+
+              <button hlmMenuItem disabled>
+                <ng-icon hlm name="lucideCog" hlmMenuIcon />
+                <span>Settings</span>
+                <hlm-menu-shortcut>⌘S</hlm-menu-shortcut>
+              </button>
+            </hlm-menu-group>
+
+            <hlm-menu-separator />
+
+            <button hlmMenuItem (click)="logoutUser()">
+              <ng-icon hlm name="lucideLogOut" hlmMenuIcon />
+              <span>Logout</span>
+              <hlm-menu-shortcut>⇧⌘Q</hlm-menu-shortcut>
+            </button>
+          </hlm-menu-group>
+        </hlm-menu>
+      </ng-template>
+      }@else {
       <app-login-dialog></app-login-dialog>
-      <button hlmBtn variant="outline">Carrito</button>
+
+      }
+
+      <button hlmBtn disabled variant="outline">
+        <ng-icon hlm size="sm" name="lucideShoppingCart"></ng-icon>
+      </button>
     </div>
   </div>
 </div>
-<div class="m-auto max-w-[1000px]">
+
+<div class="mt-10 m-auto max-w-[1000px]">
   <p class="mb-2 mt-2 text-center text-2xl font-bold">En Oferta</p>
   <div class="flex items-center justify-center w-full p-4">
     <hlm-carousel class="w-full" [plugins]="plugins">
       <hlm-carousel-content class="-ml-1">
-        @for (item of items; track item) {
+        @for (item of productsWithDiscount(); track item.id) {
         <hlm-carousel-item class="pl-1 basis-1/4">
           <div class="p-1">
-            <section
-              hlmCard
-              class="border-2 border-border rounded-2xl h-full w-full"
-            >
-              <img
-                src="https://randomwordgenerator.com/img/picture-generator/g5e88100863414dbdb30f6ba4c053e7e2d5c4ccb9f781dd52e7392e6c95826b83302b30779a019d15ced6e5cce473483a_640.jpg"
-                alt=""
-              />
-              <!-- class="flex items-center justify-center p-6 aspect-square" -->
-              <div hlmCardContent class="p-2">
-                <p class="text-sm">Categoria</p>
-                <p class="text-2xl font-semibold">product.name</p>
-                <p>
-                  <span class="text-1xl">S/.</span
-                  ><span class="text-3xl">{{ item }}0.00</span>
-                </p>
-                <div class="w-full flex justify-end">
-                  <button hlmBtn class="mt-2">+ Agregar</button>
-                </div>
-              </div>
-            </section>
+            <app-product-card [item]="item"></app-product-card>
           </div>
         </hlm-carousel-item>
         }
@@ -52,34 +88,17 @@
       <button hlm-carousel-next></button>
     </hlm-carousel>
   </div>
-  <div class="w-full bg-gray-500 h-[200px] rounded-2xl"></div>
-  <p class="mb-2 mt-2 text-center text-2xl font-bold">Categoria 1</p>
+  <div class="my-10 w-full bg-gray-500 h-[200px] rounded-2xl">
+    <img src="https://picsum.photos/1003/200" alt="Banner" />
+  </div>
+  <p class="my-5 text-center text-2xl font-bold">All Products</p>
   <div class="flex items-center justify-center w-full p-4">
     <hlm-carousel class="w-full" [plugins]="plugins">
       <hlm-carousel-content class="-ml-1">
-        @for (item of items; track item) {
+        @for (item of productsAll(); track item) {
         <hlm-carousel-item class="pl-1 basis-1/4">
           <div class="p-1">
-            <section
-              hlmCard
-              class="border-2 border-border rounded-2xl h-full w-full"
-            >
-              <img
-                src="https://randomwordgenerator.com/img/picture-generator/57e5d1444250a814f1dc8460962e33791c3ad6e04e5074417c2f7dd4914ac7_640.jpg"
-                alt=""
-              />
-              <div hlmCardContent class="p-2">
-                <p class="text-sm">Categoria</p>
-                <p class="text-2xl font-semibold">product.name</p>
-                <p>
-                  <span class="text-1xl">S/.</span
-                  ><span class="text-3xl">{{ item }}0.00</span>
-                </p>
-                <div class="w-full flex justify-end">
-                  <button hlmBtn class="mt-2">+ Agregar</button>
-                </div>
-              </div>
-            </section>
+            <app-product-card [item]="item"></app-product-card>
           </div>
         </hlm-carousel-item>
         }
@@ -90,4 +109,9 @@
   </div>
 </div>
 
-<div class="w-full bg-black h-[80px] grid place-items-center">Footer/menu</div>
+<div class="mt-10 w-full bg-black h-[200px] grid place-items-center">
+  <span>
+    A-shop made with ❤️ by
+    <a href="https://github.com/Aireck2">Erick Escriba</a>
+  </span>
+</div>
