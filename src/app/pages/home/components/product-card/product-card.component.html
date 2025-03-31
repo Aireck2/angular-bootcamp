@@ -1,0 +1,39 @@
+<section
+  hlmCard
+  class="relative border-2 border-border rounded-2xl h-full w-full"
+>
+  <img
+    width="100"
+    height="100"
+    class="w-full h-[200px] object-cover"
+    src="{{ item().images[0] }}"
+    alt="{{ item().name }}"
+  />
+  @if(item().hasDiscount) {
+  <div
+    class="absolute top-2 right-2 flex justify-center bg-red-700 px-4 py-2 rounded-lg"
+  >
+    <span>
+      {{ item().percentageDiscount * 0.01 | percent }}
+    </span>
+  </div>
+  }
+  <div hlmCardContent class="p-2">
+    <p class="text-xs">Categoria {{ item().id }}</p>
+    <p class="text-2xl font-semibold">{{ item().name }}</p>
+
+    <p>
+      <span class="text-1xl line-through text-zinc-500">S/.</span
+      ><span class="text-1xl line-through text-zinc-500">{{
+        item().price
+      }}</span>
+    </p>
+    <p class="text-red-500">
+      <span class="text-1xl">S/.</span
+      ><span class="text-3xl">{{ item().priceWithDiscount }}</span>
+    </p>
+    <div class="mt-5">
+      <app-add-cart-dialog [product]="item()"></app-add-cart-dialog>
+    </div>
+  </div>
+</section>
