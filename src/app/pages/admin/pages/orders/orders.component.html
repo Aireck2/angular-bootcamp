@@ -1,8 +1,120 @@
-<app-table
-  [columns]="columns()"
-  [tableSource]="tableSource()"
-  [allDisplayedColumns]="allDisplayedColumns()"
-  [trackBy]="trackBy"
-  [totalElements]="totalElements()"
-  [_onStateChange]="_onStateChange"
-></app-table>
+<div class="h-full flex-1 flex-col space-y-4 p-8 py-6">
+  <!-- <app-table-actions /> -->
+
+  <div class="wip-table">
+    <brn-table
+      hlm
+      stickyHeader
+      class="border-border mt-4 block max-h-full overflow-auto rounded-md border"
+      [dataSource]="tableSource()"
+      [displayedColumns]="allDisplayedColumns()"
+      [trackBy]="trackBy"
+    >
+      <brn-column-def name="id" class="w-[80px]">
+        <hlm-th truncate *brnHeaderDef>
+          <button hlmBtn size="sm" variant="ghost">ID</button>
+        </hlm-th>
+        <hlm-td truncate *brnCellDef="let element">
+          {{ element.id }}
+        </hlm-td>
+      </brn-column-def>
+      <brn-column-def name="name" class="w-32">
+        <hlm-th *brnHeaderDef>
+          <button hlmBtn size="sm" variant="ghost">Product</button>
+        </hlm-th>
+        <hlm-td truncate *brnCellDef="let element" class="font-medium">
+          {{ element.product.name }}
+        </hlm-td>
+      </brn-column-def>
+      <brn-column-def name="user" class="w-32">
+        <hlm-th *brnHeaderDef>
+          <button hlmBtn size="sm" variant="ghost">User</button>
+        </hlm-th>
+        <hlm-td truncate *brnCellDef="let element">
+          <div class="flex">
+            <span>{{ element.user.name }}</span>
+          </div>
+        </hlm-td>
+      </brn-column-def>
+      <brn-column-def name="price" class="w-32">
+        <hlm-th *brnHeaderDef>
+          <button hlmBtn size="sm" variant="ghost">Price</button>
+        </hlm-th>
+        <hlm-td truncate *brnCellDef="let element">
+          <div class="flex items-center">
+            <span>{{ element.finalPrice | currency }}</span>
+          </div>
+        </hlm-td>
+      </brn-column-def>
+      <brn-column-def name="status" class="w-[110px]">
+        <hlm-th *brnHeaderDef>
+          <button hlmBtn size="sm" variant="ghost">Status</button>
+        </hlm-th>
+        <hlm-td truncate *brnCellDef="let element">
+          <div class="flex items-center">
+            <span>{{ element.status }}</span>
+          </div>
+        </hlm-td>
+      </brn-column-def>
+
+      <div
+        class="text-muted-foreground flex items-center justify-center p-20"
+        brnNoDataRow
+      >
+        No data
+      </div>
+    </brn-table>
+    <div
+      class="mt-4 flex flex-col justify-between sm:flex-row sm:items-center"
+      *brnPaginator="
+        let ctx;
+        totalElements: totalElements();
+        pageSize: pageSize();
+        onStateChange: _onStateChange
+      "
+    >
+      <span class="text-muted-foreground text-sm">
+        {{ totalElements() }} total items
+      </span>
+      <div class="mt-2 flex sm:mt-0">
+        <brn-select
+          class="inline-block"
+          placeholder="{{ availablePageSizes[0] }}"
+          [(ngModel)]="pageSize"
+        >
+          <hlm-select-trigger class="w-full mr-1 inline-flex h-9">
+            <hlm-select-value />
+          </hlm-select-trigger>
+          <hlm-select-content>
+            @for (size of availablePageSizes; track size) {
+            <hlm-option [value]="size">
+              {{ size === 10000 ? "All" : size }}
+            </hlm-option>
+            }
+          </hlm-select-content>
+        </brn-select>
+
+        <div class="flex space-x-1">
+          <button
+            size="default"
+            variant="outline"
+            hlmBtn
+            [disabled]="!ctx.decrementable()"
+            (click)="ctx.decrement()"
+          >
+            Previous
+          </button>
+          <button
+            size="sm"
+            variant="outline"
+            hlmBtn
+            [disabled]="!ctx.incrementable()"
+            (click)="ctx.increment()"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

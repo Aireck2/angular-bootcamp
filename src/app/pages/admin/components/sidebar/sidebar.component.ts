@@ -34,6 +34,7 @@ interface ListItem {
 export class SidebarComponent {
   private readonly _router = inject(Router);
   public isSelected = (key: ListItem['key']) => key === this._router.url;
+  public appName = import.meta.env.NG_APP_PREFIX_APP_NAME;
   public discover: ListItem[] = [
     {
       key: '/admin/products',

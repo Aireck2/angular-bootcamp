@@ -16,6 +16,7 @@ import { HlmMenuModule } from '@spartan-ng/ui-menu-helm';
 import { HlmSelectModule } from '@spartan-ng/ui-select-helm';
 import { AuthService } from '../../services/auth.service';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { AbbreviationPipe } from './pipes/abbrevation.pipe';
 
 @Component({
   selector: 'app-admin',
@@ -30,6 +31,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     HlmAvatarImports,
     SidebarComponent,
     RouterOutlet,
+    AbbreviationPipe,
   ],
   providers: [
     provideIcons({ lucideLogOut, lucideUser, lucideCog, lucideLayers }),
@@ -39,13 +41,26 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 export class AdminComponent {
   private readonly _authService = inject(AuthService);
   private readonly _router = inject(Router);
+  public user: any | null = null;
+
+  ngOnInit() {
+    this._authService.getMe().subscribe({
+      next: ({ data }) => {
+        this.user = data;
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+  }
+
   routeName = () => {
     const routeName = this._router.url.split('/').at(-1);
     return routeName;
   };
 
-  logout() {
-    this._authService.logout();
+  logoutAdmin() {
+    this._authService.logoutAdmin();
     this._router.navigate(['/login']);
   }
 }

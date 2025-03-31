@@ -10,7 +10,7 @@
       [displayedColumns]="allDisplayedColumns()"
       [trackBy]="trackBy"
     >
-      <brn-column-def name="id" class="w-32">
+      <brn-column-def name="id" class="w-[80px]">
         <hlm-th truncate *brnHeaderDef>
           <button hlmBtn size="sm" variant="ghost">ID</button>
         </hlm-th>
@@ -18,7 +18,7 @@
           {{ element.id }}
         </hlm-td>
       </brn-column-def>
-      <brn-column-def name="name" class="w-60 flex-1">
+      <brn-column-def name="name" class="w-32 flex-1">
         <hlm-th *brnHeaderDef>
           <button hlmBtn size="sm" variant="ghost">Product</button>
         </hlm-th>
@@ -26,13 +26,54 @@
           {{ element.name }}
         </hlm-td>
       </brn-column-def>
-      <brn-column-def name="status" class="w-32">
+      <brn-column-def name="description" class="w-32 flex-1">
         <hlm-th *brnHeaderDef>
-          <button hlmBtn size="sm" variant="ghost">Status</button>
+          <button hlmBtn size="sm" variant="ghost">Description</button>
         </hlm-th>
         <hlm-td truncate *brnCellDef="let element">
           <div class="flex items-center">
-            <span>{{ element.status }}</span>
+            <span>{{ element.description }}</span>
+          </div>
+        </hlm-td>
+      </brn-column-def>
+      <brn-column-def name="price" class="w-32">
+        <hlm-th *brnHeaderDef>
+          <button hlmBtn size="sm" variant="ghost">Price</button>
+        </hlm-th>
+        <hlm-td truncate *brnCellDef="let element">
+          <div class="flex items-center">
+            <span>{{ element.price | currency }}</span>
+          </div>
+        </hlm-td>
+      </brn-column-def>
+      <brn-column-def name="percentageDiscount" class="w-[110px]">
+        <hlm-th *brnHeaderDef>
+          <button hlmBtn size="sm" variant="ghost">Discount</button>
+        </hlm-th>
+        <hlm-td truncate *brnCellDef="let element">
+          <div class="flex items-center">
+            <span>{{ element.percentageDiscount * 0.01 | percent }}</span>
+          </div>
+        </hlm-td>
+      </brn-column-def>
+      <brn-column-def name="priceWithDiscount" class="w-[150px]">
+        <hlm-th *brnHeaderDef>
+          <button hlmBtn size="sm" variant="ghost">Price/Discount</button>
+        </hlm-th>
+        <hlm-td truncate *brnCellDef="let element">
+          <div class="flex items-center">
+            <span>{{ element.priceWithDiscount | currency }}</span>
+          </div>
+        </hlm-td>
+      </brn-column-def>
+
+      <brn-column-def name="images" class="w-[100px]">
+        <hlm-th *brnHeaderDef>
+          <button hlmBtn size="sm" variant="ghost">Images</button>
+        </hlm-th>
+        <hlm-td truncate *brnCellDef="let element">
+          <div class="flex items-center">
+            <span>{{ element.images.length }}</span>
           </div>
         </hlm-td>
       </brn-column-def>
@@ -40,100 +81,7 @@
       <brn-column-def name="actions" class="w-40">
         <hlm-th *brnHeaderDef>Actions</hlm-th>
         <hlm-td *brnCellDef="let element">
-          <hlm-dialog>
-            <button
-              size="icon"
-              class="cursor-pointer"
-              [class]="_hlmMenuItemClasses"
-              brnDialogTrigger
-            >
-              <ng-icon name="lucideFilePenLine"></ng-icon>
-            </button>
-            <hlm-dialog-content
-              class="sm:max-w-[425px]"
-              *brnDialogContent="let ctx"
-            >
-              <hlm-dialog-header>
-                <h2 hlmDialogTitle>Edit Product</h2>
-                <p hlmDialogDescription>
-                  Make changes to your product here. Click save when you're
-                  done.
-                </p>
-              </hlm-dialog-header>
-              <form [formGroup]="productForm" (ngSubmit)="createProduct()">
-                <hlm-form-field class="pb-4">
-                  <label hlmLabel class="sr-only" for="email">Name</label>
-                  <input
-                    hlmInput
-                    class="w-full"
-                    placeholder="Name"
-                    type="text"
-                    id="name"
-                    formControlName="name"
-                  />
-                </hlm-form-field>
-                <hlm-form-field class="pb-4">
-                  <label hlmLabel class="sr-only" for="description"
-                    >Description</label
-                  >
-                  <textarea
-                    hlmInput
-                    class="w-full"
-                    placeholder="Description"
-                    id="description"
-                    rows="4"
-                    formControlName="description"
-                  ></textarea>
-                </hlm-form-field>
-                <hlm-form-field class="pb-4">
-                  <label hlmLabel class="sr-only" for="price">Price</label>
-                  <input
-                    hlmInput
-                    class="w-full"
-                    placeholder="Price"
-                    type="number"
-                    id="price"
-                    formControlName="price"
-                  />
-                </hlm-form-field>
-                <div class="w-full pb-4 pt-1">
-                  <label
-                    class="flex items-center max-w-fit"
-                    hlmLabel
-                    for="hasDiscount"
-                  >
-                    <hlm-switch
-                      class="mr-2"
-                      id="hasDiscount"
-                      formControlName="hasDiscount"
-                    />
-                    Has Discount?
-                  </label>
-                </div>
-
-                <hlm-form-field
-                  *ngIf="productForm.get('hasDiscount')?.value"
-                  class="pb-4"
-                >
-                  <label hlmLabel class="sr-only" for="percentageDiscount"
-                    >Percentage discount</label
-                  >
-                  <input
-                    hlmInput
-                    formControlName="percentageDiscount"
-                    class="w-full"
-                    placeholder="Percentage discount"
-                    type="number"
-                    id="percentageDiscount"
-                  />
-                </hlm-form-field>
-
-                <hlm-dialog-footer>
-                  <button hlmBtn type="submit">Save changes</button>
-                </hlm-dialog-footer>
-              </form>
-            </hlm-dialog-content>
-          </hlm-dialog>
+          <app-edit-product [product]="element"></app-edit-product>
           <hlm-alert-dialog>
             <button
               size="icon"

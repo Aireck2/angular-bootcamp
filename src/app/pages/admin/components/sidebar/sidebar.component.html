@@ -1,7 +1,12 @@
 <div class="side-menu border-border hidden h-full border-r lg:block">
   <div class="space-y-4 py-4">
     <div class="px-3 py-2">
-      <h2 class="mb-2 px-4 text-lg font-semibold tracking-tight">Admin</h2>
+      <div class="flex py-4 items-center">
+        <img src="favicon.ico" alt="logo" class="h-8 w-8" />
+        <h2 class="px-4 text-lg font-semibold tracking-tight">
+          Admin {{ appName }}
+        </h2>
+      </div>
       <div class="space-y-1">
         @for (item of discover; track item) {
         <app-side-button

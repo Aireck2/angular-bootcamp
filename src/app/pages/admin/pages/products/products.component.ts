@@ -1,9 +1,9 @@
-import { NgIf } from '@angular/common';
+import { CurrencyPipe, PercentPipe } from '@angular/common';
 import {
   Component,
   computed,
   inject,
-  signal,
+  OnInit,
   TrackByFunction,
 } from '@angular/core';
 import {
@@ -14,16 +14,13 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideFilePenLine, lucideTrash2 } from '@ng-icons/lucide';
 import {
   BrnAlertDialogContentDirective,
   BrnAlertDialogTriggerDirective,
 } from '@spartan-ng/brain/alert-dialog';
-import {
-  BrnDialogContentDirective,
-  BrnDialogTriggerDirective,
-} from '@spartan-ng/brain/dialog';
 import { BrnSelectModule } from '@spartan-ng/brain/select';
 import { BrnTableModule, PaginatorState } from '@spartan-ng/brain/table';
 import {
@@ -38,54 +35,32 @@ import {
 } from '@spartan-ng/ui-alertdialog-helm';
 import { HlmAvatarImports } from '@spartan-ng/ui-avatar-helm';
 import { HlmButtonModule } from '@spartan-ng/ui-button-helm';
-import {
-  HlmDialogComponent,
-  HlmDialogContentComponent,
-  HlmDialogFooterComponent,
-  HlmDialogHeaderComponent,
-} from '@spartan-ng/ui-dialog-helm';
-import { HlmFormFieldComponent } from '@spartan-ng/ui-formfield-helm';
-import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
-import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
 import { hlmMenuItemVariants, HlmMenuModule } from '@spartan-ng/ui-menu-helm';
 import { HlmSelectModule } from '@spartan-ng/ui-select-helm';
-import { HlmSwitchComponent } from '@spartan-ng/ui-switch-helm';
 import { HlmTableModule } from '@spartan-ng/ui-table-helm';
-import { PAGE_SIZES } from '../../../../utils/constants';
-import { TableActionsComponent } from '../../components/table-actions/table-actions.component';
-import { ProductsService, Task } from './products.service';
+import {
+  Product,
+  ProductsService,
+} from '../../../../services/products.service';
+import { EditProductComponent } from './components/edit-product.component';
+import { TableActionsComponent } from './components/table-actions/table-actions.component';
 
 @Component({
   selector: 'app-products',
   imports: [
     FormsModule,
+    NgIcon,
     HlmMenuModule,
+    ReactiveFormsModule,
+
     BrnTableModule,
+    BrnSelectModule,
     HlmTableModule,
     HlmButtonModule,
-    BrnSelectModule,
     HlmSelectModule,
-    TableActionsComponent,
     HlmAvatarImports,
-    NgIcon,
-    HlmInputDirective,
-    HlmSwitchComponent,
-    HlmFormFieldComponent,
-    NgIf,
-    ReactiveFormsModule,
-    HlmLabelDirective,
-
-    BrnDialogTriggerDirective,
-    BrnDialogContentDirective,
-
-    HlmDialogContentComponent,
-    HlmDialogComponent,
-    HlmDialogHeaderComponent,
-    HlmDialogFooterComponent,
-
     BrnAlertDialogTriggerDirective,
     BrnAlertDialogContentDirective,
-
     HlmAlertDialogComponent,
     HlmAlertDialogHeaderComponent,
     HlmAlertDialogFooterComponent,
@@ -94,6 +69,11 @@ import { ProductsService, Task } from './products.service';
     HlmAlertDialogCancelButtonDirective,
     HlmAlertDialogActionButtonDirective,
     HlmAlertDialogContentComponent,
+
+    TableActionsComponent,
+    EditProductComponent,
+    CurrencyPipe,
+    PercentPipe,
   ],
 
   providers: [
@@ -105,26 +85,34 @@ import { ProductsService, Task } from './products.service';
 
   templateUrl: './products.component.html',
 })
-export class ProductsComponent {
+export class ProductsComponent implements OnInit {
+  private titleService = inject(Title);
+
+  constructor() {
+    this.titleService.setTitle(
+      `Products | Admin ${import.meta.env.NG_APP_PREFIX_APP_NAME} `
+    );
+  }
   protected readonly _hlmMenuItemClasses = hlmMenuItemVariants({});
   private readonly _productsService = inject(ProductsService);
-  protected readonly trackBy: TrackByFunction<Task> = (_: number, p: Task) =>
-    p.id;
+  protected readonly trackBy: TrackByFunction<Product> = (
+    _: number,
+    p: Product
+  ) => p.id;
 
   protected readonly totalElements = computed(
-    () => this._productsService._filteredTasks().length
+    () => this._productsService.pageInfo().total
   );
-  protected readonly columns = this._productsService.columns;
+
+  protected readonly pageSize = this._productsService.pageSize;
+  protected readonly availablePageSizes =
+    this._productsService.availablePageSizes;
 
   protected readonly allDisplayedColumns =
     this._productsService.getAllDisplayedColumns();
 
   protected readonly tableSource =
-    this._productsService.getFilteredSortedPaginatedTasks();
-
-  public readonly pageSize = signal(PAGE_SIZES[1]); // default to page size 10
-
-  protected readonly availablePageSizes = PAGE_SIZES;
+    this._productsService.getFilteredSortedPaginatedProducts();
 
   protected readonly _onStateChange = ({
     startIndex,
@@ -144,18 +132,19 @@ export class ProductsComponent {
   }
 
   ngOnInit() {
+    this._productsService.getProducts().subscribe(({ data, pageInfo }) => {
+      this._productsService.products.set(data);
+      this._productsService.pageInfo.set(pageInfo);
+    });
     this.productForm = this._formBuilder.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
       price: ['', Validators.required],
       hasDiscount: false,
-      images: this._formBuilder.array([
-        this.createImageControl(), // Initialize with one valid input
-      ]),
-      percentageDiscount: [''],
+      images: this._formBuilder.array([this.createImageControl()]),
+      percentageDiscount: [null],
     });
 
-    // Dynamically manage the discount field
     this.productForm
       .get('hasDiscount')
       ?.valueChanges.subscribe((hasDiscount) => {
@@ -174,11 +163,11 @@ export class ProductsComponent {
       });
   }
 
-  createProduct() {
-    console.log('create product');
-    console.log('Form Data:', this.productForm.value);
+  updateProduct() {
+    if (this.productForm.invalid) {
+      console.log('Form is invalid');
+    }
   }
-
   deleteProduct() {
     console.log('delete product');
   }
